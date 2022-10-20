@@ -14,6 +14,9 @@ def main():
     green = 0, 255, 0
     white = 255, 255, 255
     points = 0
+    v = 6
+    m = 2
+    is_jump = True
 
     # create a graphical window with a given width and height
     screen = pygame.display.set_mode(size)
@@ -56,12 +59,15 @@ def main():
 
         # move dino up and down using the space bar
         keys = pygame.key.get_pressed()
+        
         if keys[pygame.K_SPACE]:
-            dinorect.y -= 4  # dinorect.move(speed_dino_up)
-        if dinorect.top < height - 110:
-            dinorect.y += 2  # dinorect.move(speed_dino_down)
-        if dinorect.top < 0:
-            dinorect.y += 110  # prevents dino from going off screen
+            is_jump, v, m, dinorect.y = jump(is_jump, v, m, dinorect.y)
+    
+        #     dinorect.y -= 4  # dinorect.move(speed_dino_up)
+        # if dinorect.top < height - 110:
+        #     dinorect.y += 2  # dinorect.move(speed_dino_down)
+        # if dinorect.top < 0:
+        #     dinorect.y += 110  # prevents dino from going off screen
 
         screen.fill(blue)
         pygame.draw.rect(screen, green, pygame.Rect(0, height - 15, width, 15))
@@ -71,6 +77,24 @@ def main():
         screen.blit(dino, dinorect)
         pygame.display.flip()
 
+
+def jump(bool, v, m, y):
+    if bool == True:
+        if v > 0:
+            F = 10 #0.5 * m * (v*v)
+        else:
+            F = -10#(0.5 * m * (v*v))
+        y = y - F
+        v = v - 1
+        if y >= 130:
+            y = 130
+            bool = False
+            v = 8
+    else:
+        bool = True
+    return (bool, v, m, y)
+        
+        
 
 if __name__ == "__main__":
     main()
